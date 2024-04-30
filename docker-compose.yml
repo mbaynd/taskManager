@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+  frontend:
+    build: 
+      context: ./frontend
+      dockerfile: ./Dockerfile
+    env_file:
+      - ./frontend/.env
+    volumes:
+      - ./frontend:/app
+    ports:
+      - 8980:8000
+    command: ["python", "main.python"]
+  
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: ./Dockerfile
+    env_file:
+      - ./backend/.env
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8990:8000"
+    command: ["python", "main.py"]
