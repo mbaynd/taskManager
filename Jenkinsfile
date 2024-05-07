@@ -26,7 +26,7 @@ pipeline {
         stage(" Build Docker Image"){
             steps {
                 sh '''
-                   docker-compose build   -t taskManager-vvv1.0.1 .
+                   docker compose build --force-rm --no-cache   
                   '''
       
             }
