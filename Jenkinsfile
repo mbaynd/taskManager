@@ -26,7 +26,6 @@ pipeline {
                     steps {
                         withSonarQubeEnv('sonar') {
                             sh '''
-                        
                             /opt/sonar-scanner/bin/sonar-scanner -Dsonar.projectName=TaskManager \
                             -Dsonar.projectKey=TaskManager
                             echo "FIN - Sonar Scan"
