@@ -8,25 +8,34 @@ pipeline {
             }
         } 
         
-        stage('Trivy FS') {
-            steps {
-               echo "DEBUT - TRIVY Vulnerability Scan"
-               sh "trivy fs ."
-               echo "FIN - TRIVY Vulnerability Scan"
-            }
-        }
-
+        
         stage(" Sonarqube Analysis "){
-            steps{
-                 withSonarQubeEnv('sonar') {
-                    sh '''
-                    echo "DEBUT - Sonar Scan"
-                    /opt/sonar-scanner/bin/sonar-scanner -Dsonar.projectName=TaskManager \
-                    -Dsonar.projectKey=TaskManager -Dsonar.token=squ_7c4e3e404eafe1bc5211dc30f054bf01b24a307f
-                    echo "FIN - Sonar Scan"
-                    '''
-                 }
+            parallel {
+                stage('"DEBUT - TRIVY Vulnerability Scan') {
+                    steps {
+                        sh "trivy fs ."
+                    }
+                }
+                stage("DEBUT -----> de Sonarqube Analysis") {
+                    steps {
+                        sh 'echo "DEBUT - Sonar Scan"'
+                    }
+                }
+
+                stage("DEBUT de Sonar Qube Analysis"){
+                    steps {
+                        withSonarQubeEnv('sonar') {
+                            sh '''
+                            
+                            /opt/sonar-scanner/bin/sonar-scanner -Dsonar.projectName=TaskManager \
+                            -Dsonar.projectKey=TaskManager -Dsonar.token=squ_7c4e3e404eafe1bc5211dc30f054bf01b24a307f
+                            echo "FIN - Sonar Scan"
+                            '''
+                        }
+                    }
+                }
             }
+            
         } 
         
         stage(" Build Docker Image"){
@@ -36,7 +45,6 @@ pipeline {
                    docker compose build --force-rm --no-cache   
                    echo "FIN --- Build des images Frontend et Backend"
                   '''
-      
             }
         }
     }      
