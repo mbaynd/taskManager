@@ -26,9 +26,9 @@ pipeline {
                     steps {
                         withSonarQubeEnv('sonar') {
                             sh '''
-                            
+                        
                             /opt/sonar-scanner/bin/sonar-scanner -Dsonar.projectName=TaskManager \
-                            -Dsonar.projectKey=TaskManager -Dsonar.token=squ_7c4e3e404eafe1bc5211dc30f054bf01b24a307f
+                            -Dsonar.projectKey=TaskManager
                             echo "FIN - Sonar Scan"
                             '''
                         }
@@ -44,7 +44,7 @@ pipeline {
                    echo "DEBUT --- Build des images Frontend et Backend"
                    docker compose build --force-rm --no-cache   
                    echo "FIN --- Build des images Frontend et Backend"
-                  '''
+                  '''نذيبيبذببذبببب@م§
             }
         }
     }      
