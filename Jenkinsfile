@@ -43,7 +43,7 @@ pipeline {
                    echo "DEBUT --- Build des images Frontend et Backend"
                    docker compose build --force-rm --no-cache   
                    echo "FIN --- Build des images Frontend et Backend"
-                  '''نذيبيبذببذبببب@م§
+                  '''
             }
         }
     }      
