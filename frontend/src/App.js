@@ -1,7 +1,7 @@
 import './App.css';
 import { Header } from './components/Header';
 import { Todos } from './components/Todos';
-import { Box, Flex, Spacer, Center, Square, Text, Stack, VStack, HStack } from '@chakra-ui/react';
+import { Box, Flex, Center, Square, Text} from '@chakra-ui/react';
 
 function App() {
   return (
