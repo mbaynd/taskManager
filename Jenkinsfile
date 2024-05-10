@@ -16,12 +16,14 @@ pipeline {
                         sh "trivy fs ."
                     }
                 }
-                stage("DEBUT -----> de Sonarqube Analysis") {
+
+                stage('OWASP Dependency') {
                     steps {
-                        sh 'echo "DEBUT - Sonar Scan"'
+                        dependencyCheck additionalArguments: '--scan ./  --nvdApiKey "ed43c876-8976-4e9c-aa2a-346aafb569ba"  --format HTML ', odcInstallation: 'DP_Check'
+                        dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
                     }
                 }
-
+            
                 stage("DEBUT de Sonar Qube Analysis"){
                     steps {
                         withSonarQubeEnv('sonar') {
@@ -48,3 +50,9 @@ pipeline {
         }
     }      
 }
+
+
+
+Prestations Maintenance et support DevOPS 
+Administration et gestion des plateformes techniques des 
+services  de QuickPay sur AWS
