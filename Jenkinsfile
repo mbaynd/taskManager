@@ -16,13 +16,14 @@ pipeline {
                         sh '''
                             cd frontend
                             npm install
+                            npm audit fix --force
                         '''
                     }
                 }
 
                 stage('TRIVY Vulnerability Scan') {
                     steps {
-                        sh "trivy fs ."
+                        sh "trivy fs . > trivyfs.txt"
                     }
                 }
             }
@@ -60,10 +61,22 @@ pipeline {
         stage('TRIVY Docker Image Vulnerability Scan') {
                     steps {
                         sh '''
-                            trivy image --exit-code 0  --severity HIGH,CRITICAL --scanners vuln taskmanager_main-frontend
-                            trivy image --exit-code 0  --severity HIGH,CRITICAL --scanners vuln taskmanager_main-backend
+                            trivy image --exit-code 0  --severity HIGH,CRITICAL --scanners vuln taskmanager_main-frontend > trivyimage.txt
+                            trivy image --exit-code 0  --severity HIGH,CRITICAL --scanners vuln taskmanager_main-backend >> trivyimage.txt
                         '''
                     }
                 }
-    }      
+    }     
+
+    post {
+     always {
+        emailext attachLog: true,
+            subject: "'${currentBuild.result}'",
+            body: "Project: ${env.JOB_NAME}<br/>" +
+                "Build Number: ${env.BUILD_NUMBER}<br/>" +
+                "URL: ${env.BUILD_URL}<br/>",
+            to: 'mbayn@gmail.com',                               
+            attachmentsPattern: 'trivyfs.txt,trivyimage.txt'
+        }
+    } 
 }
