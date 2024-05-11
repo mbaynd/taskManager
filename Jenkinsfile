@@ -22,7 +22,7 @@ pipeline {
 
                 stage('TRIVY Vulnerability Scan') {
                     steps {
-                        sh "trivy fs . > trivyfs.txt"
+                        sh "trivy fs --scanners vuln . > trivyfs.txt"
                     }
                 }
             }
