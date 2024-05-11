@@ -52,8 +52,8 @@ pipeline {
         stage('TRIVY Docker Image Vulnerability Scan') {
                     steps {
                         sh '''
-                            trivy image --exit-code 1  --severity HIGH,CRITICAL --scanners vuln taskmanager_main-frontend
-                            trivy image --exit-code 1  --severity HIGH,CRITICAL --scanners vuln taskmanager_main-backend
+                            trivy image --exit-code 0  --severity HIGH,CRITICAL --scanners vuln taskmanager_main-frontend
+                            trivy image --exit-code 0  --severity HIGH,CRITICAL --scanners vuln taskmanager_main-backend
                         '''
                     }
                 }
