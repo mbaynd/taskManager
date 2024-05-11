@@ -19,15 +19,17 @@ pipeline {
                 }
             }
         }
-        
+
         parallel {
-            stage('Install Dependencies') {
+            stage('Start Message Dependencies install') {
                  steps {
                     sh '''
                         echo 'Debut Exuecution INstallation des dependances'
                     '''
                 }
+            }
 
+            stage('NPM Dependencies Installation for frontend') {
                 steps {
                     sh '''
                         cd frontend
