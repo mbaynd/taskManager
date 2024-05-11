@@ -48,6 +48,15 @@ pipeline {
                   '''
             }
         }
+
+        stage('"DEBUT - TRIVY Docker Image Vulnerability Scan') {
+                    steps {
+                        sh '''
+                            trivy image --scanners vuln taskmanager_main-frontend
+                            trivy image --scanners vuln taskmanager_main-backend
+                        '''
+                    }
+                }
     }      
 }
 
