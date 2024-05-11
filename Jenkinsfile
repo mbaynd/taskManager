@@ -11,7 +11,7 @@ pipeline {
         
         stage(" Sonarqube Analysis "){
             parallel {
-                stage('"DEBUT - TRIVY Vulnerability Scan') {
+                stage('TRIVY Vulnerability Scan') {
                     steps {
                         sh "trivy fs ."
                     }
@@ -24,7 +24,7 @@ pipeline {
                     }
                 }
             
-                stage("DEBUT de Sonar Qube Analysis"){
+                stage("Sonar Qube Analysis"){
                     steps {
                         withSonarQubeEnv('sonar') {
                             sh '''
@@ -39,7 +39,7 @@ pipeline {
             
         } 
         
-        stage(" Build Docker Image"){
+        stage("Build Docker Image"){
             steps {
                 sh '''
                    echo "DEBUT --- Build des images Frontend et Backend"
@@ -49,11 +49,11 @@ pipeline {
             }
         }
 
-        stage('"DEBUT - TRIVY Docker Image Vulnerability Scan') {
+        stage('TRIVY Docker Image Vulnerability Scan') {
                     steps {
                         sh '''
-                            trivy image --scanners vuln taskmanager_main-frontend
-                            trivy image --scanners vuln taskmanager_main-backend
+                            trivy image --exit-code 1  --severity HIGH,CRITICAL --scanners vuln taskmanager_main-frontend
+                            trivy image --exit-code 1  --severity HIGH,CRITICAL --scanners vuln taskmanager_main-backend
                         '''
                     }
                 }
