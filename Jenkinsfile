@@ -31,10 +31,22 @@ pipeline {
         stage('OWASP Dependency') {
             steps {
                 dependencyCheck additionalArguments: '--scan ./  --nvdApiKey "ed43c876-8976-4e9c-aa2a-346aafb569ba"  --format HTML ', odcInstallation: 'DP_Check'
-                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+                dependencyCheckPublisher pattern: 'dependency-check-report.xml'
             }
         }
-            
+        
+        stage('OWASP Dependency-Check Vulnerabilities') {
+            steps {
+                dependencyCheck additionalArguments: ''' 
+                            -o './'
+                            -s './'
+                            -f 'ALL' 
+                            --prettyPrint''', odcInstallation: 'DP_Check'
+                
+                dependencyCheckPublisher pattern: 'dependency-check-report.xml'
+            }
+        }
+
         stage("Sonar Qube Analysis"){
             steps {
                 withSonarQubeEnv('sonar') {
