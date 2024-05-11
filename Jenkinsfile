@@ -52,8 +52,6 @@ pipeline {
                 dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
-            
-        } 
         
         stage("Build Docker Image"){
             steps {
@@ -62,15 +60,15 @@ pipeline {
                   '''
             }
         }
-
+        
         stage('TRIVY Docker Image Vulnerability Scan') {
-                    steps {
-                        sh '''
-                            trivy image --exit-code 0  --severity HIGH,CRITICAL --scanners vuln taskmanager_main-frontend
-                            trivy image --exit-code 0  --severity HIGH,CRITICAL --scanners vuln taskmanager_main-backend
-                        '''
-                    }
-                }
+            steps {
+                sh '''
+                    trivy image --exit-code 0  --severity HIGH,CRITICAL --scanners vuln taskmanager_main-frontend
+                    trivy image --exit-code 0  --severity HIGH,CRITICAL --scanners vuln taskmanager_main-backend
+                '''
+            }
+        }
     }      
 }
 
