@@ -11,6 +11,15 @@ pipeline {
         
         stage("Sonarqube Analysis "){
             parallel {
+                stage('Install Dependencies') {
+                    steps {
+
+                        sh '''
+                            cd frontend
+                            npm install
+                        '''
+                    }
+                }
                 stage('TRIVY Vulnerability Scan') {
                     steps {
                         sh "trivy fs ."
@@ -39,13 +48,6 @@ pipeline {
             
         } 
 
-        stage("quality gate"){
-           steps {
-                script {
-                    waitForQualityGate abortPipeline: false, credentialsId: 'Sonar-token' 
-                }
-            } 
-        }
         
         stage("Build Docker Image"){
             steps {
