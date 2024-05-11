@@ -7,21 +7,19 @@ pipeline {
                 git 'https://github.com/mbaynd/taskManager.git'
             }
         } 
-        
-        
-        stage("Static Code Analysis  and Vulnerability Scan"){
-            stage("Sonar Qube Analysis"){
-                    steps {
-                        withSonarQubeEnv('sonar') {
-                            sh '''
-                            /opt/sonar-scanner/bin/sonar-scanner -Dsonar.projectName=TaskManager \
-                            -Dsonar.projectKey=TaskManager
-                            echo "FIN - Sonar Scan"
-                            ''' 
-                        }
-                    }
-        }
 
+        stage("Sonar Qube Analysis"){
+            steps {
+                withSonarQubeEnv('sonar') {
+                    sh '''
+                        /opt/sonar-scanner/bin/sonar-scanner -Dsonar.projectName=TaskManager \
+                        -Dsonar.projectKey=TaskManager
+                        echo "FIN - Sonar Scan"
+                    ''' 
+                }
+            }
+        }
+        
         parallel {
             stage('Install Dependencies') {
                  steps {
@@ -29,7 +27,7 @@ pipeline {
                         echo 'Debut Exuecution INstallation des dependances'
                     '''
                 }
-                
+
                 steps {
                     sh '''
                         cd frontend
