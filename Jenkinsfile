@@ -2,6 +2,11 @@ pipeline {
     agent any
 
     stages {
+        stage ("Trivy Scan github Repository") {
+            steps{
+                sh 'trivy repository --exit-code 1 --no-progress --severity HIGH,CRITICAL --scanners vuln https://github.com/mbaynd/taskManager.git'
+            }
+        }
         stage('Git Checkout') {
             steps {
                 git 'https://github.com/mbaynd/taskManager.git'
