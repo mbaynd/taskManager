@@ -16,7 +16,6 @@ pipeline {
                         sh '''
                             cd frontend
                             npm install
-                            npm audit fix --force
                         '''
                     }
                 }
