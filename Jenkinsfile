@@ -9,31 +9,8 @@ pipeline {
         } 
         
         
-        stage("Sonarqube Analysis "){
-            parallel {
-                stage('Install Dependencies') {
-                    steps {
-
-                        sh '''
-                            cd frontend
-                            npm install
-                        '''
-                    }
-                }
-                stage('TRIVY Vulnerability Scan') {
-                    steps {
-                        sh "trivy fs ."
-                    }
-                }
-
-                stage('OWASP Dependency') {
-                    steps {
-                        dependencyCheck additionalArguments: '--scan ./  --nvdApiKey "ed43c876-8976-4e9c-aa2a-346aafb569ba"  --format HTML ', odcInstallation: 'DP_Check'
-                        dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-                    }
-                }
-            
-                stage("Sonar Qube Analysis"){
+        stage("Static Code Analysis  and Vulnerability Scan"){
+            stage("Sonar Qube Analysis"){
                     steps {
                         withSonarQubeEnv('sonar') {
                             sh '''
@@ -43,8 +20,38 @@ pipeline {
                             ''' 
                         }
                     }
+        }
+
+        parallel {
+            stage('Install Dependencies') {
+                 steps {
+                    sh '''
+                        echo 'Debut Exuecution INstallation des dependances'
+                    '''
+                }
+                
+                steps {
+                    sh '''
+                        cd frontend
+                        npm install
+                        npm audit fix --force
+                    '''
                 }
             }
+        }
+
+        stage('TRIVY Vulnerability Scan') {
+            steps {
+                sh "trivy fs ."
+            }
+        }
+
+        stage('OWASP Dependency') {
+            steps {
+                dependencyCheck additionalArguments: '--scan ./  --nvdApiKey "ed43c876-8976-4e9c-aa2a-346aafb569ba"  --format HTML ', odcInstallation: 'DP_Check'
+                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
+            }
+        }
             
         } 
         
