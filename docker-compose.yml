@@ -12,7 +12,7 @@ services:
       - ./frontend:/app
     ports:
       - 8980:8000
-    command: ["python", "main.python"]
+    command: ["npm", "start"]
   
   backend:
     container_name: taskmanagerbackend

@@ -2,6 +2,12 @@ pipeline {
     agent any
 
     stages {
+        stage ("Clean Up Workspace") {
+            steps {
+                cleanWs()
+            }
+        }
+
         stage ("Trivy Scan GITHUB Repository") {
             steps{
                 sh 'trivy repository --exit-code 0 --no-progress --severity HIGH,CRITICAL --scanners vuln https://github.com/mbaynd/taskManager.git > trivyrepo.txt'
