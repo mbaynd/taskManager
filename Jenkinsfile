@@ -85,7 +85,7 @@ pipeline {
         }
 
         stage("Docker Build & Push"){
-            steps{Deploy to container to Staging
+            steps{
                 script{
                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){   
                        sh "docker tag taskManager-frontend mbaynd/taskManager-frontend:latest"
@@ -97,7 +97,8 @@ pipeline {
                 }
             }
         }
-        stage('Deploy to container to Staging'){
+
+        stage('Deploy to container to Staging') {
             steps{
                 sh 'docker-compose up -d'
             }
