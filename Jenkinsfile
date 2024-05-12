@@ -12,7 +12,6 @@ pipeline {
                 git 'https://github.com/mbaynd/taskManager.git'
             }
         } 
-            
         stage("Sonar Qube Analysis"){
             steps {
                 withSonarQubeEnv('sonar') {
@@ -24,7 +23,7 @@ pipeline {
                 }
             }
         }
-        
+
         stage("Project Dependencies and FS Scan"){
             parallel {
 
