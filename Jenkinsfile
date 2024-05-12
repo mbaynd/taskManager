@@ -24,10 +24,7 @@ pipeline {
                 }
             }
         }
-    
         
-
-    
         stage("Project Dependencies and FS Scan"){
             parallel {
 
