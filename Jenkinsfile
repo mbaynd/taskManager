@@ -78,11 +78,11 @@ pipeline {
             steps{
                 script{
                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker'){   
-                       sh "docker tag taskManager-frontend mbaynd/taskManager-frontend:latest"
-                       sh "docker tag taskManager-backend mbaynd/taskManager-backend:latest "
+                       sh "docker tag taskmanagerfrontend mbaynd/taskmanagerfrontend:latest"
+                       sh "docker tag taskmanagerbackend mbaynd/taskmanagerbackend:latest "
                        sh 'echo "salafiyAAA" | docker login -u mbaynd --password-stdin'
-                       sh "docker push mbaynd/taskManager-frontend:latest"
-                       sh "docker push mbaynd/taskManager-backend:latest"
+                       sh "docker push mbaynd/taskmanagerfrontend:latest"
+                       sh "docker push mbaynd/taskmanagerbackend:latest"
                     }
                 }
             }
