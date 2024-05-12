@@ -4,6 +4,8 @@ pipeline {
     stages {
         stage ("Clean Up Workspace") {
             steps {
+
+                sh 'echo "Celaning the Workspace first"'
                 cleanWs()
             }
         }
