@@ -17,7 +17,7 @@ pipeline {
         }
         stage('Git Checkout') {
             steps { 
-                git 'https://github.com/mbaynd/taskManager.git'
+                checkout scm
             }
         } 
         stage("Sonar Qube Analysis"){
