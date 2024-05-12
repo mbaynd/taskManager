@@ -2,6 +2,7 @@ version: "3"
 
 services:
   frontend:
+    container_name: taskManager-frontend
     build: 
       context: ./frontend
       dockerfile: ./Dockerfile
@@ -14,6 +15,7 @@ services:
     command: ["python", "main.python"]
   
   backend:
+    container_name: taskManager-backend
     build: 
       context: ./backend
       dockerfile: ./Dockerfile
