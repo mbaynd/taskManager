@@ -98,7 +98,11 @@ pipeline {
 
         stage('Deploy to container to Staging') {
             steps{
-                sh 'docker-compose up -d'
+                
+                sh '''
+                    docker rm -f taskmanagerfrontend taskmanagerbackend
+                    docker compose up -d
+                '''
             }
         }
     }     
