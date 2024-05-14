@@ -1,0 +1,106 @@
+@Library('jenkins-shared-library') _
+pipeline {
+    agent any
+
+    stages {
+        stage('Clean Up Workspace') {
+            steps {
+                sh 'echo "Celaning the Workspace first"'
+                cleanWs()
+                sh 'rm -f trivyrepo.txt trivyfs.txt trivyimage.txt'
+            }
+        }
+
+        stage('Trivy Scan GITHUB Repository') {
+            steps {
+                script {
+                    scannerFor.repo('https://github.com/mbaynd/taskManager.git')
+                }
+            }
+        }
+
+        stage('Sonar Qube Analysis') {
+            steps {
+                script {
+                    scannerFor.sast('TaskManager')
+                }
+            }
+        }
+
+        stage('Project Dependencies and FS Scan'){
+            parallel {
+                stage('Install NPM Dependencies') {
+                    steps {
+                        script {
+                            scannerFor.installDeps('frontend')
+                        }
+                    }
+                }
+
+                stage('TRIVY Vulnerability Scan') {
+                    steps {
+                        script {
+                            scannerFor.fs()
+                        }
+                    }
+                }
+            }
+        } 
+
+        stage('OWASP Dependency-Check Vulnerabilities') {
+            steps {
+                script {
+                    scannerFor.owasp()
+                }
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    scannerFor.docker_build('taskmanager')
+                }
+            }
+        }
+
+        stage('TRIVY Docker Image Vulnerability Scan') {
+            steps {
+                script {
+                    scannerFor.image('taskmanager-frontend')
+                    scannerFor.image('taskmanager-backend')
+                }
+            }
+        }
+
+        stage('Docker Tag Image & Push') {
+            steps{
+                script{
+                    scannerFor.tagPush('docker', 'docker', 'taskmanager-frontend', 'mbaynd/taskmanagerfrontend:latest')
+                    scannerFor.tagPush('docker', 'docker', 'taskmanager-backend', 'mbaynd/taskmanagerbackend:latest')
+                }
+            }
+        }
+
+        stage('Deploy to container to Staging') {
+            steps{
+                script {
+                    scannerFor.deployBuild('taskmanagerfrontend')
+                    scannerFor.deployBuild('taskmanagerbackend')
+                }
+            }
+        }
+    } 
+
+    post {
+     always {
+        emailext attachLog: true,
+            mimeType: 'text/html',
+            subject: "'${currentBuild.result}'",
+            body: "Project: ${env.JOB_NAME}<br/>" +
+                "Build Number: ${env.BUILD_NUMBER}<br/>" +
+                "URL: ${env.BUILD_URL}<br/>",
+            to: 'mbaynd@gmail.com;mbaynd@yahoo.fr',
+            attachmentsPattern: 'trivyrepo.txt,trivyfs.txt,trivyimage.txt'
+        }
+    } 
+}

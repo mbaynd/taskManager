@@ -101,7 +101,7 @@ pipeline {
                 
                 sh '''
                     docker rm -f taskmanagerfrontend taskmanagerbackend
-                    docker compose up -d
+                    docker compose -p taskmanager up -d
                 '''
             }
         }
