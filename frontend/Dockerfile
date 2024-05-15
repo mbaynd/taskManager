@@ -19,7 +19,7 @@ COPY ./package*.json /app
 RUN npm install
 
 # Copying all the files in our project
-COPY . /app/
+COPY ../frontend /app/
 
 # Starting our application
 CMD ["npm","start"]

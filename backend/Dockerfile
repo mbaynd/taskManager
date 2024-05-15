@@ -8,7 +8,7 @@ USER nonroot
 
 WORKDIR /app
 
-COPY . /app
+COPY ../backend /app
 
 RUN apt-get update && apt-get install -y curl
 
