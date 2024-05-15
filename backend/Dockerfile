@@ -1,6 +1,11 @@
 # syntax=docker/dockerfile:1.4
 FROM python:3.9.8-slim
 
+RUN addgroup -S nonroot \
+    && adduser -S nonroot -G nonroot
+
+USER nonroot
+
 WORKDIR /app
 
 COPY . /app

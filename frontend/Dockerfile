@@ -2,6 +2,11 @@
 # Fetching the latest node image on alpine linux
 FROM node:alpine AS development
 
+RUN addgroup -S nonroot \
+    && adduser -S nonroot -G nonroot
+
+USER nonroot
+
 # Declaring env
 ENV NODE_ENV development
 

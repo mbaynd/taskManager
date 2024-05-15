@@ -5,20 +5,36 @@ pipeline {
     stages {
         stage('Clean Up Workspace') {
             steps {
-                sh 'echo "Celaning the Workspace first"'
+                sh 'echo "Cleaning the Workspace first"'
                 cleanWs()
                 sh 'rm -f trivyrepo.txt trivyfs.txt trivyimage.txt'
+            }
+        }
+
+        stage('Gitub scanning for secrets in Repository') {
+            steps {
+                script {
+                    scannerFor.scan_secrets('https://github.com/mbaynd/taskManager.git')
+                }
             }
         }
 
         stage('Trivy Scan GITHUB Repository') {
             steps {
                 script {
-                    scannerFor.repo('https://github.com/mbaynd/taskManager.git')
+                    scannerFor.repo('https://github.com/mbaynd/taskManager.git', 'main')
                 }
             }
         }
-
+        stage('Git Checkout') {
+            steps { 
+                script {
+                    //scannerFor.checkoutCode('https://github.com/mbaynd/taskManager.git', 'taskManager')
+                    sh 'git clone https://github.com/mbaynd/taskManager.git taskManager && cd taskManager'
+                }
+            }
+        } 
+        
         stage('Sonar Qube Analysis') {
             steps {
                 script {
@@ -32,7 +48,7 @@ pipeline {
                 stage('Install NPM Dependencies') {
                     steps {
                         script {
-                            scannerFor.installDeps('frontend')
+                            scannerFor.installDeps('taskManager/frontend')
                         }
                     }
                 }
@@ -58,7 +74,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    scannerFor.docker_build('taskmanager')
+                    scannerFor.docker_build('taskManager')
                 }
             }
         }
@@ -75,21 +91,29 @@ pipeline {
         stage('Docker Tag Image & Push') {
             steps{
                 script{
-                    scannerFor.tagPush('docker', 'docker', 'taskmanager-frontend', 'mbaynd/taskmanagerfrontend:latest')
-                    scannerFor.tagPush('docker', 'docker', 'taskmanager-backend', 'mbaynd/taskmanagerbackend:latest')
+                    scannerFor.tagPush('taskmanager-frontend', 'mbaynd/taskmanagerfrontend:latest')
+                    scannerFor.tagPush('taskmanager-backend', 'mbaynd/taskmanagerbackend:latest')
                 }
             }
         }
 
         stage('Deploy to container to Staging') {
-            steps{
+            steps {
                 script {
-                    scannerFor.deployBuild('taskmanagerfrontend')
-                    scannerFor.deployBuild('taskmanagerbackend')
+                    scannerFor.deployBuild('taskManager','frontend')
+                    scannerFor.deployBuild('taskManager','backend')
                 }
             }
         }
-    } 
+
+        stage('DAST - Dynamic Application Security Testing') {
+            steps {
+               script {
+                    scannerFor.scanDeployment('https://app.cashespeces.net')
+                }
+            }
+        }
+    }
 
     post {
      always {
@@ -100,7 +124,7 @@ pipeline {
                 "Build Number: ${env.BUILD_NUMBER}<br/>" +
                 "URL: ${env.BUILD_URL}<br/>",
             to: 'mbaynd@gmail.com;mbaynd@yahoo.fr',
-            attachmentsPattern: 'trivyrepo.txt,trivyfs.txt,trivyimage.txt'
+            attachmentsPattern: 'trivyrepo.txt,trivyfs.txt,trivyimage.txt,stable-full-scan-report.html'
         }
     } 
 }
