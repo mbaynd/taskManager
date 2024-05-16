@@ -9,7 +9,7 @@ FROM node:alpine AS development
 #RUN groupadd -r $GROUPNAME && useradd -g $GROUPNAME $USERNAME  
 #RUN mkdir /app && chown -R $USERNAME:$GROUPNAME /app
 #USER $USERNAME
-USER node
+#USER node
 # Setting up the work directory
 RUN mkdir /home/node/app
 WORKDIR /home/node/app
@@ -20,7 +20,7 @@ ENV NODE_ENV development
 
 # Installing dependencies
 COPY ./package*.json /home/node/app
-RUN  chown -R node:node /home/node/app
+#RUN  chown -R node:node /home/node/app
 
 RUN npm install
 
