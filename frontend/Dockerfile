@@ -12,13 +12,14 @@ FROM node:alpine AS development
 USER node
 # Setting up the work directory
 WORKDIR /app
-RUN  chown -R node:node /app
+
 
 # Declaring env
 ENV NODE_ENV development
 
 # Installing dependencies
 COPY ./package*.json /app
+RUN  chown -R node:node /app
 
 RUN npm install
 
