@@ -3,17 +3,16 @@
 FROM node:alpine AS development
 
 
-ARG USERNAME=deployer
-ARG GROUPNAME=deployer
+#ARG USERNAME=deployer
+#ARG GROUPNAME=deployer
 
-RUN groupadd -r $GROUPNAME && useradd -g $GROUPNAME $USERNAME  
-RUN mkdir /app && chown -R $USERNAME:$GROUPNAME /app
-
-USER $USERNAME
-
+#RUN groupadd -r $GROUPNAME && useradd -g $GROUPNAME $USERNAME  
+#RUN mkdir /app && chown -R $USERNAME:$GROUPNAME /app
+#USER $USERNAME
+USER node
 # Setting up the work directory
 WORKDIR /app
-RUN  chown -R $USER_UID:$USER_GID /app
+RUN  chown -R node:node /app
 
 # Declaring env
 ENV NODE_ENV development
