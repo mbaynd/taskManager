@@ -5,7 +5,8 @@ FROM python:3.9-alpine
 ARG USERNAME=deployer
 ARG GROUPNAME=deployer
 
-RUN groupadd -r $GROUPNAME && useradd -g $GROUPNAME $USERNAME  
+RUN adduser -D $USERNAME
+RUN addgroup  $GROUPNAME && addgroup $USERNAME $GROUPNAME  
 RUN mkdir /app && chown -R $USERNAME:$GROUPNAME /app
 
 USER $USERNAME
