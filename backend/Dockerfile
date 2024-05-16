@@ -6,7 +6,7 @@ ARG USERNAME=deployer
 ARG GROUPNAME=deployer
 
 RUN adduser -D $USERNAME
-RUN addgroup  $GROUPNAME && addgroup $USERNAME $GROUPNAME  
+#RUN addgroup  $GROUPNAME && addgroup $USERNAME $GROUPNAME  
 RUN mkdir /app && chown -R $USERNAME:$GROUPNAME /app
 
 USER $USERNAME
