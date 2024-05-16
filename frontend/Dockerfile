@@ -11,22 +11,23 @@ FROM node:alpine AS development
 #USER $USERNAME
 USER node
 # Setting up the work directory
-WORKDIR /app
+RUN mkdir /home/node/app
+WORKDIR /home/node/app
 
 
 # Declaring env
 ENV NODE_ENV development
 
 # Installing dependencies
-COPY ./package*.json /app
-RUN  chown -R node:node /app
+COPY ./package*.json /home/node/app
+RUN  chown -R node:node /home/node/app
 
 RUN npm install
 
 # Copying all the files in our project
-COPY src /app/
-COPY public /app/
-COPY ./.env /app/
+COPY src /home/node/app/
+COPY public /home/node/app/
+COPY ./.env /home/node/app/
 
 
 # Starting our application
