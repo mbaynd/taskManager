@@ -24,9 +24,9 @@ COPY ./package*.json /app
 RUN npm install
 
 # Copying all the files in our project
-COPY src /app/
-COPY public /app/
-COPY .env /app/
+COPY ./src /app/
+COPY ./public /app/
+COPY ./.env /app/
 
 
 # Starting our application
