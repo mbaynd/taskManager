@@ -1,6 +1,14 @@
 # syntax=docker/dockerfile:1.4
-FROM python:3.9.8-slim
+#FROM python:3.9.8-slim
+FROM python:3.9-alpine
 
+ARG USERNAME=deployer
+ARG GROUPNAME=deployer
+
+RUN groupadd -r $GROUPNAME && useradd -g $GROUPNAME $USERNAME  
+RUN mkdir /app && chown -R $USERNAME:$GROUPNAME /app
+
+USER $USERNAME
 
 WORKDIR /app
 
