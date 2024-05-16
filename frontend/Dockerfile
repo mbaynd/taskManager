@@ -18,15 +18,16 @@ RUN  chown -R $USER_UID:$USER_GID /app
 # Declaring env
 ENV NODE_ENV development
 
-
-
 # Installing dependencies
 COPY ./package*.json /app
 
 RUN npm install
 
 # Copying all the files in our project
-COPY ../frontend /app/
+COPY src /app/
+COPY public /app/
+COPY .env /app/
+
 
 # Starting our application
 CMD ["npm","start"]
