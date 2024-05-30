@@ -73,9 +73,12 @@ async def add_todo(item: str):
 @app.delete("/delete", tags=["Todos Tasks"])
 async def delete_todo(todo: dict):
     return { 
-        "":""
+        "todo": todo
     }
 
 @app.put("/update",tags=["Todos Tasks"])
 async def update_todo(id: int, new_todo: dict):
-    return ""
+    return {
+        "id" : id,
+        "new_todo": new_todo
+    }
